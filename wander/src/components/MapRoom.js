@@ -2,8 +2,8 @@ import React from 'react'
 
 const MapRoom = props => {
     return (
-        <div className = "mapRoom">
-            {props.room.fields.title}
+        <div className = {props.room.pk == props.currentRoomId ? "mapRoom currentRoom": "mapRoom"}>
+            {props.room.pk}
         </div>
     )
 }
