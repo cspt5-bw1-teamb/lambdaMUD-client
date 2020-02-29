@@ -4,19 +4,52 @@ import MapRoom from './MapRoom'
 
 const Map = props => {
 
-    const [rooms, setRooms] = useState([])
+    const [roomList, setRoomList] = useState([])
 
     useEffect(() => {
-        axios.get('https://lambda-mud-test.herokuapp.com/api/adv/rooms/', {headers: {'Authorization': `Token 013ba7e8edbbe9e2623416ea939ed403bfa2cef0`}})
-            .then(res => setRooms(JSON.parse(res.data.rooms)))
-            .catch(err => console.log(err))
+        const getRooms = async () => {
+            await axios.get('https://lambda-mud-test.herokuapp.com/api/adv/rooms/', {headers: {'Authorization': `Token 013ba7e8edbbe9e2623416ea939ed403bfa2cef0`}})
+                .then(res => setRoomList(JSON.parse(res.data.rooms)))
+                .catch(err => console.log(err))
         }
-    )
+        getRooms()
+    }, [])
+
+    const createMap = (rooms) => {
+        if(rooms.length > 0) {
+            console.log(rooms)
+            let createdRoomCoordinates = []
+            let createdRooms = []
+            const createRoom = (room, x, y) => {
+                createdRoomCoordinates.push(`${x},${y}`)
+                createdRooms.push({room: room, x: x, y:y})
+                let roomId = 0
+                if(room.fields.n_to > 0 && !createdRoomCoordinates.includes(`${x},${y+1}`)) {
+                    roomId = room.fields.n_to
+                    createRoom(rooms.filter(room => room.pk === roomId)[0], x, y+1)
+                }
+                if(room.fields.s_to > 0 && !createdRoomCoordinates.includes(`${x},${y-1}`) ) {
+                    roomId = room.fields.s_to
+                    createRoom(rooms.filter(room => room.pk === roomId)[0], x, y-1)
+                }
+                if(room.fields.w_to > 0 && !createdRoomCoordinates.includes(`${x-1},${y}`) ) {
+                    roomId = room.fields.w_to
+                    createRoom(rooms.filter(room => room.pk === roomId)[0], x-1, y)
+                }
+                if(room.fields.e_to > 0 && !createdRoomCoordinates.includes(`${x+1},${y}`) ) {
+                    roomId = room.fields.e_to
+                    createRoom(rooms.filter(room => room.pk === roomId)[0], x+1, y)
+                }
+            }
+            createRoom(rooms[0], 0, 0)
+            return createdRooms.map(room => <MapRoom room={room} currentRoomId={props.currentRoomId}/>)
+        }
+    }
 
     return (
         <div className="map">
             <p>Map</p>
-            {rooms.map(room => <MapRoom currentRoomId={props.currentRoomId} room={room} key={room.title}/>)}
+            {createMap(roomList)}
         </div>
     )
 }
