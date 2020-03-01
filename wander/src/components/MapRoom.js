@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Player from './Player'
 
 const Container = styled.div`
     display: flex;
@@ -103,6 +104,7 @@ const MapRoom = props => {
                 </MiddleLeft>
                 <Box currentRoomId = {props.currentRoomId} room = {props.room}>
                     {props.room.room.pk}
+                    {props.currentRoomId === props.room.room.pk ? <Player direction={props.direction}/> : null}
                 </Box>
                 <MiddleRight>
                     <MidRightTop room = {props.room}/>

@@ -5,6 +5,7 @@ import MapRoom from './MapRoom'
 const Map = props => {
 
     const [roomList, setRoomList] = useState([])
+    const [direction, setDirection] = useState("n")
 
     useEffect(() => {
         const getRooms = async () => {
@@ -14,6 +15,18 @@ const Map = props => {
         }
         getRooms()
     }, [])
+
+    const trackDirection = event => {
+        if(event.code === "ArrowUp") {
+            setDirection("n")
+        } else if(event.code === "ArrowDown") {
+            setDirection("s")
+        } else if(event.code === "ArrowLeft") {
+            setDirection("w")
+        } else if(event.code === "ArrowRight") {
+            setDirection("e")
+        }
+    }
 
     const createMap = (rooms) => {
         if(rooms.length > 0) {
@@ -42,12 +55,13 @@ const Map = props => {
                 }
             }
             createRoom(rooms[0], 0, 0)
-            return createdRooms.map(room => <MapRoom room={room} currentRoomId={props.currentRoomId}/>)
+            return createdRooms.map(room => <MapRoom room={room} currentRoomId={props.currentRoomId} direction={direction}/>)
         }
     }
 
     return (
         <div className="map">
+            {document.addEventListener('keydown', trackDirection)}
             <p>Map</p>
             {createMap(roomList)}
         </div>
