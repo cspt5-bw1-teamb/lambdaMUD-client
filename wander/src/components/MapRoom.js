@@ -8,8 +8,8 @@ const Container = styled.div`
     position: fixed;
     max-width: 50%;
     max-height: 50%;
-    top: ${props => `${800 - props.room.y * 100}px`};
-    left: ${props => `${500 + props.room.x * 100}px`};
+    top: ${props => `${500 - props.room.y * 100}px`};
+    left: ${props => `${625 + props.room.x * 100}px`};
 `
 
 const Box = styled.div`
@@ -103,7 +103,6 @@ const MapRoom = props => {
                     <MidLeftBottom room = {props.room}/>
                 </MiddleLeft>
                 <Box currentRoomId = {props.currentRoomId} room = {props.room}>
-                    {props.room.room.pk}
                     {props.currentRoomId === props.room.room.pk ? <Player direction={props.direction}/> : null}
                 </Box>
                 <MiddleRight>

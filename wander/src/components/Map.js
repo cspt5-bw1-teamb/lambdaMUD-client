@@ -2,10 +2,12 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import MapRoom from './MapRoom'
 
-const Map = props => {
+const Map = () => {
 
     const [roomList, setRoomList] = useState([])
-    const [direction, setDirection] = useState("n")
+    const [direction, setDirection] = useState("n_to")
+    const [currentRoomId, setCurrentRoomId] = useState(1)
+    const [message, setMessage] = useState("")
 
     useEffect(() => {
         const getRooms = async () => {
@@ -16,21 +18,19 @@ const Map = props => {
         getRooms()
     }, [])
 
-    const trackDirection = event => {
-        if(event.code === "ArrowUp") {
-            setDirection("n")
-        } else if(event.code === "ArrowDown") {
-            setDirection("s")
-        } else if(event.code === "ArrowLeft") {
-            setDirection("w")
-        } else if(event.code === "ArrowRight") {
-            setDirection("e")
+    const move = async move_to => {
+        const currentRoom = roomList.filter(room => room.pk === currentRoomId)[0]
+        if(currentRoom && currentRoom.fields[move_to + "_to"]) {
+            setMessage("")
+            setCurrentRoomId(currentRoom.fields[move_to + "_to"])
+        } else {
+            setMessage("Can't Move That Way")
         }
+        setDirection(move_to + "_to")
     }
 
     const createMap = (rooms) => {
         if(rooms.length > 0) {
-            console.log(rooms)
             let createdRoomCoordinates = []
             let createdRooms = []
             const createRoom = (room, x, y) => {
@@ -55,15 +55,23 @@ const Map = props => {
                 }
             }
             createRoom(rooms[0], 0, 0)
-            return createdRooms.map(room => <MapRoom room={room} currentRoomId={props.currentRoomId} direction={direction}/>)
+            return createdRooms.map(room => <MapRoom room={room} currentRoomId={currentRoomId} direction={direction}/>)
         }
     }
 
     return (
         <div className="map">
-            {document.addEventListener('keydown', trackDirection)}
             <p>Map</p>
             {createMap(roomList)}
+            <div>
+                <button onClick={() => move("n")}>North</button>
+                <div>
+                    <button onClick={() => move("w")}>West</button>
+                    <button onClick={() => move("e")}>East</button>
+                </div>
+                <button onClick={() => move("s")}>South</button>
+            </div>
+            <p>{message}</p>
         </div>
     )
 }
