@@ -1,14 +1,18 @@
 import React from "react";
 import "./App.css";
-import Login from "./components/login/login";
-import "semantic-ui-css/semantic.min.css";
+import Signup from "./components/login/Signup";
+import Signin from "./components/login/Signin";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Welcome to our game</h1>
-      <Login />
-    </div>
+    <Router>
+      <h1>hello world</h1>
+      <Switch>
+        <Route exact path="/" component={Signup} />
+        <Route path="/signin" component={Signin} />
+      </Switch>
+    </Router>
   );
 }
 
