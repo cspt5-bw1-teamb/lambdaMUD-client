@@ -16,7 +16,7 @@ const Box = styled.div`
     border: 1px black solid;
     width: 50px;
     height: 50px;
-    background-color: ${props => props.room.room.pk === props.currentRoomId ? "aquamarine" : "white"};
+    background-color: ${props => props.room.room.fields.title === props.currentRoomTitle ? "aquamarine" : "white"};
 `
 
 const Top = styled.div`
@@ -102,8 +102,8 @@ const MapRoom = props => {
                     <MidLeftTop room = {props.room}/>
                     <MidLeftBottom room = {props.room}/>
                 </MiddleLeft>
-                <Box currentRoomId = {props.currentRoomId} room = {props.room}>
-                    {props.currentRoomId === props.room.room.pk ? <Player direction={props.direction}/> : null}
+                <Box currentRoomTitle = {props.currentRoomTitle} room = {props.room}>
+                    {props.currentRoomTitle === props.room.room.fields.title ? <Player direction={props.direction}/> : null}
                 </Box>
                 <MiddleRight>
                     <MidRightTop room = {props.room}/>

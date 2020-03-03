@@ -6,23 +6,30 @@ const Map = () => {
 
     const [roomList, setRoomList] = useState([])
     const [direction, setDirection] = useState("n_to")
-    const [currentRoomId, setCurrentRoomId] = useState(1)
+    const [currentRoomTitle, setCurrentRoomTitle] = useState("")
     const [message, setMessage] = useState("")
 
     useEffect(() => {
+        const initPlayer = async () => {
+            await axios.get('https://lambda-mud-test.herokuapp.com/api/adv/init/', {headers: {'Authorization': `Token 013ba7e8edbbe9e2623416ea939ed403bfa2cef0`}})
+                .then(res => setCurrentRoomTitle(res.data.title))
+                .catch(err => console.log(err))
+        }
         const getRooms = async () => {
             await axios.get('https://lambda-mud-test.herokuapp.com/api/adv/rooms/', {headers: {'Authorization': `Token 013ba7e8edbbe9e2623416ea939ed403bfa2cef0`}})
                 .then(res => setRoomList(JSON.parse(res.data.rooms)))
                 .catch(err => console.log(err))
         }
+        initPlayer()
         getRooms()
     }, [])
 
     const move = async move_to => {
-        const currentRoom = roomList.filter(room => room.pk === currentRoomId)[0]
+        const currentRoom = roomList.filter(room => room.fields.title === currentRoomTitle)[0]
+        const nextRoom = roomList.filter(room => room.pk === currentRoom.fields[move_to + "_to"])
         if(currentRoom && currentRoom.fields[move_to + "_to"]) {
             setMessage("")
-            setCurrentRoomId(currentRoom.fields[move_to + "_to"])
+            setCurrentRoomTitle(nextRoom[0].fields.title)
         } else {
             setMessage("Can't Move That Way")
         }
@@ -55,7 +62,7 @@ const Map = () => {
                 }
             }
             createRoom(rooms[0], 0, 0)
-            return createdRooms.map(room => <MapRoom room={room} currentRoomId={currentRoomId} direction={direction}/>)
+            return createdRooms.map(room => <MapRoom room={room} currentRoomTitle={currentRoomTitle} direction={direction}/>)
         }
     }
 
