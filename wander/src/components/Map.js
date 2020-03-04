@@ -18,7 +18,7 @@ const Map = () => {
                 .catch(err => console.log(err))
         }
         const getRooms = async () => {
-            await axios.get('https://cspt5-bw1-teamb-master.herokuapp.com/api/adv/rooms', {headers: {"Authorization": "Token 30b30e45fa35939f9b6e90fdcb428fa9dbd4aca7"}})
+            await axios.get('https://cspt5-bw1-teamb-master.herokuapp.com/api/adv/rooms', {headers: {"Authorization": `Token ${localStorage.getItem("token")}`}})
                 .then(res => setRoomList(res.data))
                 .catch(err => console.log(err))
         }
