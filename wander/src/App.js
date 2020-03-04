@@ -8,13 +8,10 @@ import Map from "./components/Map";
 function App() {
   return (
     <Router>
-      <h1>hello world</h1>
-      <div className="App">
-        <Map currentRoomId={3} />
-      </div>
       <Switch>
         <Route exact path="/" component={Signup} />
-        <Route path="/signin" component={Signin} />
+        <Route exact path="/signin" component={Signin} />
+        <Route exact path = "/map" component={Map} />
       </Switch>
     </Router>
   );
