@@ -8,7 +8,8 @@ const Map = props => {
 
     useEffect(() => {
         const getRooms = async () => {
-            await axios.get('https://lambda-mud-test.herokuapp.com/api/adv/rooms/', {headers: {'Authorization': `Token 013ba7e8edbbe9e2623416ea939ed403bfa2cef0`}})
+            console.log(localStorage.getItem("token"))
+            await axios.get("https://cspt5-bw1-teamb-master.herokuapp.com/api/adv/rooms", {headers: {'Authorization': `Token ${localStorage.getItem("token")}`}})
                 .then(res => setRoomList(JSON.parse(res.data.rooms)))
                 .catch(err => console.log(err))
         }
