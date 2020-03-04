@@ -16,7 +16,7 @@ const Box = styled.div`
     border: 1px black solid;
     width: 50px;
     height: 50px;
-    background-color: ${props => props.room.room.fields.title === props.currentRoomTitle ? "aquamarine" : "white"};
+    background-color: ${props => props.room.room.title === props.currentRoomTitle ? "aquamarine" : "white"};
 `
 
 const Top = styled.div`
@@ -32,25 +32,25 @@ const Bottom = styled.div`
 const TopLeft = styled.div`
     width: 50%;
     height: 25px;
-    border-right: ${props => props.room.room.fields.n_to ? "1px black solid" : "none"};
+    border-right: ${props => props.room.room.n_to ? "1px black solid" : "none"};
 `
 
 const TopRight = styled.div`
     width: 50%;
     height: 25px;
-    border-left: ${props => props.room.room.fields.n_to ? "1px black solid" : "none"};
+    border-left: ${props => props.room.room.n_to ? "1px black solid" : "none"};
 `
 
 const BottomLeft = styled.div`
     width: 50%;
     height: 25px;
-    border-right: ${props => props.room.room.fields.s_to ? "1px black solid" : "none"};
+    border-right: ${props => props.room.room.s_to ? "1px black solid" : "none"};
 `
 
 const BottomRight = styled.div`
     width: 50%;
     height: 25px;
-    border-left: ${props => props.room.room.fields.s_to ? "1px black solid" : "none"};
+    border-left: ${props => props.room.room.s_to ? "1px black solid" : "none"};
 `
 
 const Middle = styled.div`
@@ -65,13 +65,13 @@ const MiddleLeft = styled.div`
 const MidLeftTop = styled.div`
     height: 50%;
     width: 25px;
-    border-bottom: ${props => props.room.room.fields.w_to ? "1px black solid" : "none"};
+    border-bottom: ${props => props.room.room.w_to ? "1px black solid" : "none"};
 `
 
 const MidLeftBottom = styled.div`
     height: 50%;
     width: 25px;
-    border-top: ${props => props.room.room.fields.w_to ? "1px black solid" : "none"};
+    border-top: ${props => props.room.room.w_to ? "1px black solid" : "none"};
 `
 
 const MiddleRight = styled.div`
@@ -81,13 +81,13 @@ const MiddleRight = styled.div`
 const MidRightTop = styled.div`
     height: 50%;
     width: 25px;
-    border-bottom: ${props => props.room.room.fields.e_to ? "1px black solid" : "none"};
+    border-bottom: ${props => props.room.room.e_to ? "1px black solid" : "none"};
 `
 
 const MidRightBottom = styled.div`
     height: 50%;
     width: 25px;
-    border-top: ${props => props.room.room.fields.e_to ? "1px black solid" : "none"};
+    border-top: ${props => props.room.room.e_to ? "1px black solid" : "none"};
 `
 
 const MapRoom = props => {
@@ -103,7 +103,7 @@ const MapRoom = props => {
                     <MidLeftBottom room = {props.room}/>
                 </MiddleLeft>
                 <Box currentRoomTitle = {props.currentRoomTitle} room = {props.room}>
-                    {props.currentRoomTitle === props.room.room.fields.title ? <Player direction={props.direction}/> : null}
+                    {props.currentRoomTitle === props.room.room.title ? <Player direction={props.direction}/> : null}
                 </Box>
                 <MiddleRight>
                     <MidRightTop room = {props.room}/>

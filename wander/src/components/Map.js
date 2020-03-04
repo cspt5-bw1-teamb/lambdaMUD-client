@@ -11,13 +11,15 @@ const Map = () => {
 
     useEffect(() => {
         const initPlayer = async () => {
-            await axios.get('https://lambda-mud-test.herokuapp.com/api/adv/init/', {headers: {'Authorization': `Token 013ba7e8edbbe9e2623416ea939ed403bfa2cef0`}})
-                .then(res => setCurrentRoomTitle(res.data.title))
+            await axios.get('https://cspt5-bw1-teamb-master.herokuapp.com/api/adv/init', {headers: {"Authorization": "Token 30b30e45fa35939f9b6e90fdcb428fa9dbd4aca7"}})
+                .then(res => {
+                    setCurrentRoomTitle(res.data.title)
+                })
                 .catch(err => console.log(err))
         }
         const getRooms = async () => {
-            await axios.get('https://lambda-mud-test.herokuapp.com/api/adv/rooms/', {headers: {'Authorization': `Token 013ba7e8edbbe9e2623416ea939ed403bfa2cef0`}})
-                .then(res => setRoomList(JSON.parse(res.data.rooms)))
+            await axios.get('https://cspt5-bw1-teamb-master.herokuapp.com/api/adv/rooms', {headers: {"Authorization": "Token 30b30e45fa35939f9b6e90fdcb428fa9dbd4aca7"}})
+                .then(res => setRoomList(res.data))
                 .catch(err => console.log(err))
         }
         initPlayer()
@@ -25,11 +27,11 @@ const Map = () => {
     }, [])
 
     const move = async move_to => {
-        const currentRoom = roomList.filter(room => room.fields.title === currentRoomTitle)[0]
-        const nextRoom = roomList.filter(room => room.pk === currentRoom.fields[move_to + "_to"])
-        if(currentRoom && currentRoom.fields[move_to + "_to"]) {
+        const currentRoom = roomList.filter(room => room.title === currentRoomTitle)[0]
+        const nextRoom = roomList.filter(room => room.id === currentRoom[move_to + "_to"])
+        if(currentRoom && currentRoom[move_to + "_to"]) {
             setMessage("")
-            setCurrentRoomTitle(nextRoom[0].fields.title)
+            setCurrentRoomTitle(nextRoom[0].title)
         } else {
             setMessage("Can't Move That Way")
         }
@@ -44,21 +46,21 @@ const Map = () => {
                 createdRoomCoordinates.push(`${x},${y}`)
                 createdRooms.push({room: room, x: x, y:y})
                 let roomId = 0
-                if(room.fields.n_to > 0 && !createdRoomCoordinates.includes(`${x},${y+1}`)) {
-                    roomId = room.fields.n_to
-                    createRoom(rooms.filter(room => room.pk === roomId)[0], x, y+1)
+                if(room.n_to > 0 && !createdRoomCoordinates.includes(`${x},${y+1}`)) {
+                    roomId = room.n_to
+                    createRoom(rooms.filter(room => room.id === roomId)[0], x, y+1)
                 }
-                if(room.fields.s_to > 0 && !createdRoomCoordinates.includes(`${x},${y-1}`) ) {
-                    roomId = room.fields.s_to
-                    createRoom(rooms.filter(room => room.pk === roomId)[0], x, y-1)
+                if(room.s_to > 0 && !createdRoomCoordinates.includes(`${x},${y-1}`) ) {
+                    roomId = room.s_to
+                    createRoom(rooms.filter(room => room.id === roomId)[0], x, y-1)
                 }
-                if(room.fields.w_to > 0 && !createdRoomCoordinates.includes(`${x-1},${y}`) ) {
-                    roomId = room.fields.w_to
-                    createRoom(rooms.filter(room => room.pk === roomId)[0], x-1, y)
+                if(room.w_to > 0 && !createdRoomCoordinates.includes(`${x-1},${y}`) ) {
+                    roomId = room.w_to
+                    createRoom(rooms.filter(room => room.id === roomId)[0], x-1, y)
                 }
-                if(room.fields.e_to > 0 && !createdRoomCoordinates.includes(`${x+1},${y}`) ) {
-                    roomId = room.fields.e_to
-                    createRoom(rooms.filter(room => room.pk === roomId)[0], x+1, y)
+                if(room.e_to > 0 && !createdRoomCoordinates.includes(`${x+1},${y}`) ) {
+                    roomId = room.e_to
+                    createRoom(rooms.filter(room => room.id === roomId)[0], x+1, y)
                 }
             }
             createRoom(rooms[0], 0, 0)
