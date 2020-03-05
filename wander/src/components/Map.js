@@ -6,14 +6,15 @@ const Map = () => {
 
     const [roomList, setRoomList] = useState([])
     const [direction, setDirection] = useState("n_to")
-    const [currentRoomTitle, setCurrentRoomTitle] = useState("")
+    const [currentRoomId, setCurrentRoomId] = useState("")
     const [message, setMessage] = useState("")
 
     useEffect(() => {
         const initPlayer = async () => {
             await axios.get('https://cspt5-bw1-teamb-master.herokuapp.com/api/adv/init', {headers: {"Authorization": `Token ${localStorage.getItem("token")}`}})
                 .then(res => {
-                    setCurrentRoomTitle(res.data.title)
+                    console.log(res)
+                    setCurrentRoomId(res.data.room_id)
                 })
                 .catch(err => console.log(err))
         }
@@ -27,15 +28,18 @@ const Map = () => {
     }, [])
 
     const move = async move_to => {
-        const currentRoom = roomList.filter(room => room.title === currentRoomTitle)[0]
+        const currentRoom = roomList.filter(room => room.id === currentRoomId)[0]
         const nextRoom = roomList.filter(room => room.id === currentRoom[move_to + "_to"])
         if(currentRoom && currentRoom[move_to + "_to"]) {
             setMessage("")
-            setCurrentRoomTitle(nextRoom[0].title)
+            setCurrentRoomId(nextRoom[0].id)
         } else {
             setMessage("Can't Move That Way")
         }
         setDirection(move_to + "_to")
+        await axios.post('https://cspt5-bw1-teamb-master.herokuapp.com/api/adv/move', {"direction": move_to}, {headers: {"Authorization": `Token ${localStorage.getItem("token")}`, "Content-Type": "application/json"}})
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
     }
 
     const createMap = (rooms) => {
@@ -64,7 +68,7 @@ const Map = () => {
                 }
             }
             createRoom(rooms[0], 0, 0)
-            return createdRooms.map(room => <MapRoom room={room} currentRoomTitle={currentRoomTitle} direction={direction}/>)
+            return createdRooms.map(room => <MapRoom room={room} currentRoomId={currentRoomId} direction={direction}/>)
         }
     }
 
