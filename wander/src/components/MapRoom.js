@@ -8,15 +8,15 @@ const Container = styled.div`
     position: fixed;
     max-width: 50%;
     max-height: 50%;
-    top: ${props => `${500 - props.room.y * 100}px`};
-    left: ${props => `${625 + props.room.x * 100}px`};
+    top: ${props => `${400 - props.room.y * 90}px`};
+    left: ${props => `${props.room.x * 90}px`};
 `
 
 const Box = styled.div`
     border: 1px black solid;
     width: 50px;
     height: 50px;
-    background-color: ${props => props.room.room.title === props.currentRoomTitle ? "aquamarine" : "white"};
+    background-color: ${props => props.room.room.id === props.currentRoomId ? "aquamarine" : "white"};
 `
 
 const Top = styled.div`
@@ -102,8 +102,8 @@ const MapRoom = props => {
                     <MidLeftTop room = {props.room}/>
                     <MidLeftBottom room = {props.room}/>
                 </MiddleLeft>
-                <Box currentRoomTitle = {props.currentRoomTitle} room = {props.room}>
-                    {props.currentRoomTitle === props.room.room.title ? <Player direction={props.direction}/> : null}
+                <Box currentRoomId = {props.currentRoomId} room = {props.room}>
+                    {props.currentRoomId === props.room.room.id ? <Player direction={props.direction}/> : props.room.room.id}
                 </Box>
                 <MiddleRight>
                     <MidRightTop room = {props.room}/>
