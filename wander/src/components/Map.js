@@ -13,7 +13,6 @@ const Map = () => {
         const initPlayer = async () => {
             await axios.get('https://cspt5-bw1-teamb-master.herokuapp.com/api/adv/init', {headers: {"Authorization": `Token ${localStorage.getItem("token")}`}})
                 .then(res => {
-                    console.log(res)
                     setCurrentRoomId(res.data.room_id)
                 })
                 .catch(err => console.log(err))
@@ -74,8 +73,9 @@ const Map = () => {
 
     return (
         <div className="map">
-            <p>Map</p>
             {createMap(roomList)}
+            <p>{roomList.length > 0 ? roomList.filter(room => room.id === currentRoomId)[0].title : null}</p>
+            <p>{roomList.length > 0 ? roomList.filter(room => room.id === currentRoomId)[0].description : null}</p>
             <div>
                 <button onClick={() => move("n")}>North</button>
                 <div>
